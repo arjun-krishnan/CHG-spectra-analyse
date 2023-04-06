@@ -25,10 +25,12 @@ wdir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(wdir)
 
 root_dir = '../'
-filename = 'train_set_ph2_ph3_-30k-0k_45fspulse.h5'
-filename = root_dir+'TrainingData/'+filename
+#filename = 'train_set_ph2_ph3_-30k-0k_45fspulse.h5'
+#filename = root_dir+'TrainingData/'+filename
 
-f = h5py.File(filename, "r")
+!wget https://tu-dortmund.sciebo.de/s/r8YteorV7Qesesg/download -O train_data.h5      #-30k-0k 45fs
+
+f = h5py.File("train_data.h5", "r")
 A = list(f['Spectra'])
 phi3 = np.array(f['TOD']).reshape(-1,)
 phi2 = np.array(f['GDD']).reshape(-1,)
