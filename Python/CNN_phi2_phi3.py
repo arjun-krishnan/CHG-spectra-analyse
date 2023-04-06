@@ -95,7 +95,8 @@ plt.show()
 cmprsr = np.load(root_dir+'cmprsr.npy')
 dx = 265- 28.1
 cmprsr += dx
-Spec_X = np.load(root_dir+'test_images_64x64.npy')
+Observed_spectra = 'CHG_spectra_observed.npy'
+Spec_X = np.load(root_dir+Observed_spectra)
 Spec_X = Spec_X.reshape(-1, dim,dim, 1)
 N = Spec_X.shape[0]
 Spec_X = Spec_X/np.max(Spec_X)
