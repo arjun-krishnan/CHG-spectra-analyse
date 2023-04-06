@@ -8,9 +8,7 @@ sigf = bwd/2.355;
 wl0 = 800e-9;
 f0 = c0/wl0;
 w0 = 2*pi*f0;
-%fi = c0/(wl0-100e-9);
 
-%fe = c0/(wl0+100e-9);
 fi = f0+50e12;
 fe = f0-50e12;
 ff = linspace(fi,fe,401);
