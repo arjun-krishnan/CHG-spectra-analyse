@@ -28,7 +28,8 @@ def load_data(filename="train_data", link=None):
     if link != None:
         print("Downloading dataset...")
         urllib.request.urlretrieve(link, filename+".h5") #-30k-0k 45fs
-    
+        print("Dataset saved as "+filename+".h5")
+        
     f = h5py.File(filename+".h5", "r")
     A = list(f['Spectra'])
     phi3 = np.array(f['TOD']).reshape(-1,)
@@ -121,7 +122,7 @@ def post_processing(model, savefile=None, plot=True):
         Phi_df.to_csv(root_dir+'Predictions/'+savefile+'.csv')
     
     if plot == True:
-        plt.figure(1)
+        plt.figure(2)
         plt.errorbar(cmprsr, phi2, yerr=phi2_err, ls='None', color='black', capsize=5)
         plt.plot(cmprsr, phi2, '.r')
         plt.grid()
@@ -130,7 +131,7 @@ def post_processing(model, savefile=None, plot=True):
         plt.tight_layout()
         plt.xticks(np.arange(264, 266.5, 0.5))
     
-        plt.figure(2)
+        plt.figure(3)
         plt.errorbar(cmprsr, phi3, yerr=phi3_err, ls='None', color='black', capsize=5)
         plt.plot(cmprsr, phi3, '.r')
         plt.grid()
@@ -163,11 +164,11 @@ def post_processing(model, savefile=None, plot=True):
         fit3, cov3 = curve_fit(lin_fit_TOD, cmprsr, phi3, sigma=phi3_err, absolute_sigma=True)
     
         D2_fit = D2_slope * cmprsr + fit2[0]
-        plt.figure(1)
+        plt.figure(2)
         plt.plot(cmprsr, D2_fit)
     
         D3_fit = D3_slope * cmprsr + fit3[0]
-        plt.figure(2)
+        plt.figure(3)
         plt.plot(cmprsr, D3_fit)
     
 
@@ -175,13 +176,14 @@ if __name__ == '__main__':
     wdir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(wdir)
     
-    df = load_data(link="https://tu-dortmund.sciebo.de/s/r8YteorV7Qesesg/download")
+    df = load_data()#(link="https://tu-dortmund.sciebo.de/s/r8YteorV7Qesesg/download")
     train_X, train_Y, val_X, val_Y, test_X, test_Y, dim = preprocess_data(df)
     
     # Create and Train Model
     model = create_model(dim)
     adam = tf.keras.optimizers.Adam(learning_rate=1e-4)
-    history = train_model(model, train_X, train_Y, val_X, val_Y, batch_size=256,epochs=1,optimizer=adam,loss_metric='huber')
-
+    history = train_model(model, train_X, train_Y, val_X, val_Y, batch_size=256,epochs=5,optimizer=adam,loss_metric='huber')
+    plot_loss(history)
+    
     post_processing(model)
 
