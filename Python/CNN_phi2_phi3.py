@@ -26,6 +26,7 @@ class MonteCarloDropout(tf.keras.layers.Dropout):
 # Load Data
 def load_data(filename="train_data", link=None):
     if link != None:
+        print("Downloading dataset...")
         urllib.request.urlretrieve(link, filename+".h5") #-30k-0k 45fs
     
     f = h5py.File(filename+".h5", "r")
@@ -97,7 +98,7 @@ def plot_loss(history):
     plt.legend(['train', 'validation'], loc='upper left')
     plt.show()
 
-def post_processing(savefile=None, plot=True):
+def post_processing(model, savefile=None, plot=True):
     root_dir = '../'
     cmprsr = np.load(root_dir + 'cmprsr.npy')
     dx = 265 - 28.1
@@ -180,5 +181,7 @@ if __name__ == '__main__':
     # Create and Train Model
     model = create_model(dim)
     adam = tf.keras.optimizers.Adam(learning_rate=1e-4)
-    history = train_model(model, train_X, train_Y, val_X, val_Y, batch_size=256,epochs=10,optimizer=adam,loss_metric='huber')
+    history = train_model(model, train_X, train_Y, val_X, val_Y, batch_size=256,epochs=1,optimizer=adam,loss_metric='huber')
+
+    post_processing(model)
 
