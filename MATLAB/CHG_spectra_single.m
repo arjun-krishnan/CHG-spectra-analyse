@@ -17,8 +17,8 @@ Ampf = exp(-(ff-f0).^2/2/sigf^2);
 figure()
 plot(ff,Ampf);
 hold on
-D2 = 5000e-30;
-D3 = -30000e-45;
+D2 = 4000e-30;
+D3 = 0000e-45;
 Phi = 1/2*D2*(ww-w0).^2 + D3*(ww-w0).^3;
 plot(ff,Phi/max(Phi));
 hold off
@@ -61,6 +61,16 @@ for i=1:length(r56_l)
     spec_l(i,:) = spec(f2i:f2l);
 end
 
-figure();
-surf(spec_l);
-shading interp;
+%%
+%figure();
+%surf(spec_l);
+%shading interp;
+wl = linspace(380,420,91);
+r56 = linspace(0, 130, 131);
+
+nexttile
+contourf(wl,r56,spec_l,100,'LineColor','None');
+%xlim([191 209]);
+%ylim([min(r56) 100]);
+xlabel('{\it \lambda} (nm)');
+ylabel('{\it R_{56}} (\mum)');
